@@ -18,7 +18,7 @@ const leadSchema = new mongoose.Schema({
   fax: { type: String },
   website: { type: String },
   leadStatus: { type: String },
-  numberOfEmployees: { type: Number },
+  numberOfEmployees: { type: String },
   rating: { type: String },
   skypeID: { type: String },
   secondaryEmail: { type: String },

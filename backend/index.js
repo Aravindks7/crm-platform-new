@@ -1,11 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const bodyParser = require("body-parser");
 const Lead = require("./models/Lead.model"); // Assuming the schema is saved in models/lead.js
 
 const app = express();
 
 app.use(bodyParser.json());
+
+var corsOptions = {
+  origin: 'http://localhost:5173',
+  methods:"GET, POST, PUT, DELETE, PATCH, HEAD",
+  credentials: true,
+}
+
+app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Backend Done and Dusted For Lead Schema 👨‍💻✅");
@@ -102,7 +111,7 @@ app.get("/leads/twitter/:handle", async (req, res) => {
 
 mongoose
   .connect(
-    "mongodb+srv://admin:47474747@cluster0.r0efhc9.mongodb.net/"
+    "mongodb+srv://ayushiguptad:ayushiguptad@cluster0.oezaz.mongodb.net/example"
   )
   .then(() => {
     console.log("Connected to database");
