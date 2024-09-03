@@ -15,38 +15,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingNew, setIsSavingNew] = useState(false);
 
-  const defaultValues = {
-    leadImage: "",
-    leadOwner: null,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    mobile: "",
-    title: "",
-    leadSource: null,
-    industry: null,
-    annualRevenue: "",
-    emailOptOut: false,
-    company: "",
-    fax: "",
-    website: "",
-    leadStatus: null,
-    numberOfEmployees: null,
-    rating: null,
-    skypeId: "",
-    secondaryEmail: "",
-    twitter: "",
-    description: "",
-    address: {
-      street: "",
-      city: null,
-      state: null,
-      zipCode: "",
-      country: null,
-    },
-  };
-
   const {
     register,
     handleSubmit,
@@ -54,7 +22,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues,
   });
 
   const handleFormSubmit = async (data, event) => {
@@ -125,7 +92,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
               label="Lead Owner"
               placeholder="Select Lead Owner"
               options={["Sabu John Bosco", "Option2", "Option3"]}
-              errors={errors}
             />
             <TextInputField
               name="company"
@@ -205,7 +171,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 "Cold Call",
                 "Event",
               ]}
-              errors={errors}
             />
 
             <SelectField
@@ -221,7 +186,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 "Converted",
                 "Lost",
               ]}
-              errors={errors}
             />
             <SelectField
               name="industry"
@@ -238,7 +202,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 "Consulting",
                 "Real Estate",
               ]}
-              errors={errors}
             />
             <SelectField
               name="numberOfEmployees"
@@ -255,7 +218,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 "5001-10,000",
                 "10,000+",
               ]}
-              errors={errors}
             />
             <TextInputField
               name="annualRevenue"
@@ -270,13 +232,11 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
               label="Rating"
               placeholder="Select Rating"
               options={["Hot", "Warm", "Cold"]}
-              errors={errors}
             />
             <CheckBoxField
               name="emailOptOut"
               register={register}
               label="Email Opt Out"
-              errors={errors}
             />
             <TextInputField
               name="skypeId"
@@ -317,7 +277,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 label="City"
                 placeholder="Select City"
                 options={["City1", "City2", "City3"]}
-                errors={errors}
               />
               <SelectField
                 name="address.state"
@@ -325,7 +284,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 label="State"
                 placeholder="Select State"
                 options={["State1", "State2", "State3"]}
-                errors={errors}
               />
               <TextInputField
                 name="address.zipCode"
@@ -340,7 +298,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 label="Country"
                 placeholder="Select Country"
                 options={["Country1", "Country2", "Country3"]}
-                errors={errors}
               />
             </div>
             <div className="mt-8">
@@ -352,7 +309,6 @@ const LeadsForm = ({ closeModal, onSubmit }) => {
                 register={register}
                 label="Description"
                 placeholder="Description"
-                errors={errors}
               />
             </div>
           </div>

@@ -33,7 +33,6 @@ export const SelectField = ({
   label,
   placeholder,
   options,
-  errors,
 }) => (
   <div className="mb-4">
     <label
@@ -55,9 +54,6 @@ export const SelectField = ({
         </option>
       ))}
     </select>
-    {errors[name] && (
-      <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
-    )}
   </div>
 );
 
@@ -93,7 +89,6 @@ export const TextAreaField = ({
   register,
   label,
   placeholder,
-  errors,
 }) => (
   <div className="mb-4">
     <label
@@ -109,9 +104,6 @@ export const TextAreaField = ({
       className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg hover:border-blue-400 outline-blue-500"
       {...register(name)}
     />
-    {errors[name] && (
-      <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
-    )}
   </div>
 );
 
@@ -119,7 +111,6 @@ export const CheckBoxField = ({
   name,
   register,
   label,
-  errors,
 }) => (
   <div className="mb-4">
     <label className="flex items-center text-sm text-gray-700">
@@ -131,9 +122,6 @@ export const CheckBoxField = ({
       />
       <span className="ml-2">{label}</span>
     </label>
-    {errors[name] && (
-      <p className="text-red-500 text-sm mt-1">{errors[name].message}</p>
-    )}
   </div>
 );
 
