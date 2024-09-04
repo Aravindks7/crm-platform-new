@@ -7,9 +7,18 @@ import AccountsActionBar from "./AccountsActionBar";
 import { useNavigate } from "react-router-dom";
 
 const AccountsTable = () => {
-  const [rowData, setRowData] = useState(accountsData);
-  const [colDefs, setColDefs] = useState(accountColumnDefs);
+  const [rowData, setRowData] = useState(() => {
+    const savedData = localStorage.getItem("userInfo");
+    return savedData ? JSON.parse(savedData) : accountsData;
+  });
+
   const navigate = useNavigate();
+
+  const handleFormSubmit = (data) => {
+    const newData = [...rowData, data];
+    setRowData(newData);
+    localStorage.setItem("userInfo", JSON.stringify(newData));
+  };
 
   const defaultColDef = useMemo(() => {
     return {
@@ -25,17 +34,17 @@ const AccountsTable = () => {
   return (
     <div>
       <div>
-        <AccountsActionBar />
+        <AccountsActionBar onFormSubmit={handleFormSubmit} />
       </div>
       <div className="m-4">
         <div className="ag-theme-quartz" style={{ height: 500 }}>
           <AgGridReact
             rowData={rowData}
+            columnDefs={accountColumnDefs}
             pagination={true}
             paginationPageSize={10}
             paginationPageSizeSelector={[10, 20]}
             rowSelection={"multiple"}
-            columnDefs={colDefs}
             defaultColDef={defaultColDef}
             onRowClicked={handleRowClick}
           />
