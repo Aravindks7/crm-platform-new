@@ -1,16 +1,57 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const Lead = require("./models/Lead.model"); // Assuming the schema is saved in models/lead.js
-
-const accountsRoutes = require("./routes/accountsRoutes");
+const Account = require("./models/accountsModel");
 
 const app = express();
 
 app.use(bodyParser.json());
 
+var corsOptions = {
+  origin: "http://localhost:5173",
+  methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.get("/", (req, res) => {
   res.send("Backend Done and Dusted For Lead Schema 👨‍💻✅");
+});
+
+app.post("/accounts", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log("Checking email:", email);
+
+    // Check if email already exists
+    const existingAccount = await Account.findOne({ email: email });
+    console.log("Existing account:", existingAccount);
+
+    if (existingAccount) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const newAccount = new Account(req.body);
+    await newAccount.save();
+    res.status(201).send(newAccount);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.get("/accounts", async (req, res) => {
+  try {
+    const accounts = await Account.find(); // Fetch all accounts
+
+    res.json(accounts); // Return the array of accounts
+  } catch (error) {
+    console.error("Error fetching accounts:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
 });
 
 // Route to create a new lead
@@ -101,8 +142,6 @@ app.get("/leads/twitter/:handle", async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 });
-
-app.use("/accounts", accountsRoutes);
 
 mongoose
   .connect("mongodb+srv://admin:47474747@cluster0.r0efhc9.mongodb.net/")

@@ -40,6 +40,15 @@ const AccountsForm = ({ closeModal, onSubmit }) => {
 
     console.log("Data successfully saved:", data);
 
+    const response = await fetch("http://localhost:3011/accounts", {
+      method:"POST",
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    console.log(response);
+
     setIsSaving(false);
     setIsSavingNew(false);
 
