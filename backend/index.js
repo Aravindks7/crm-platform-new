@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Lead = require("./models/Lead.model"); // Assuming the schema is saved in models/lead.js
 
+const accountsRoutes = require("./routes/accountsRoutes");
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -100,10 +102,10 @@ app.get("/leads/twitter/:handle", async (req, res) => {
   }
 });
 
+app.use("/accounts", accountsRoutes);
+
 mongoose
-  .connect(
-    "mongodb+srv://admin:47474747@cluster0.r0efhc9.mongodb.net/"
-  )
+  .connect("mongodb+srv://admin:47474747@cluster0.r0efhc9.mongodb.net/")
   .then(() => {
     console.log("Connected to database");
 
