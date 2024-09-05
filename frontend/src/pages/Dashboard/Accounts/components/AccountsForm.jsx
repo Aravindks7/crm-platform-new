@@ -10,6 +10,7 @@ import {
   TextInputField,
 } from "../../../../components/FormFields";
 import ClapSpinner from "../../../../components/ui/ClapSpinner";
+import toast from 'react-hot-toast';
 
 const AccountsForm = ({ closeModal, onSubmit }) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -23,41 +24,60 @@ const AccountsForm = ({ closeModal, onSubmit }) => {
   } = useForm({
     resolver: zodResolver(schema),
   });
+  
 
   const handleFormSubmit = async (data, event) => {
-    event.preventDefault();
-    const actionType = event.nativeEvent.submitter.name;
+  event.preventDefault();
+  const actionType = event.nativeEvent.submitter.name;
 
-    if (actionType === "save") {
-      setIsSaving(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      onSubmit(data);
-    } else if (actionType === "saveAndNew") {
-      setIsSavingNew(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      onSubmit(data);
-    }
+  // Set saving states before sending request
+  if (actionType === "save") {
+    setIsSaving(true);
+  } else if (actionType === "saveAndNew") {
+    setIsSavingNew(true);
+  }
 
-    console.log("Data successfully saved:", data);
-
+  
+  try {
+    // Send data to server
     const response = await fetch("http://localhost:3011/accounts", {
-      method:"POST",
+      method: "POST",
       headers: {
-        "Content-Type":"application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    })
-    console.log(response);
 
-    setIsSaving(false);
-    setIsSavingNew(false);
+    });
+    
+    // Handle response
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Email already exists.');
+    }
+    
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    toast.success('Data successfully saved!');
+    console.log("Data successfully saved:", data);
 
+    onSubmit(data);
+
+    // On successful response
     if (actionType === "saveAndNew") {
       reset();
     } else {
       closeModal();
     }
-  };
+  } catch (error) {
+    // Handle and display error
+    console.error("Error:", error.message);
+    toast.error(`Error: ${error.message}`)
+  } finally {
+    // Reset saving states
+    setIsSaving(false);
+    setIsSavingNew(false);
+  }
+};
+
 
   return (
     <div className="relative">

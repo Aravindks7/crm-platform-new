@@ -1,22 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { accountsData } from "../../../../data/AccountsData";
 import { FiPhone } from "react-icons/fi";
 import { GiRotaryPhone } from "react-icons/gi";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import AccountsHeader from "./AccountsHeader";
 import AccountsSidebar from "./AccountsSidebar";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const AccountsOverview = () => {
   const [activeTab, setActiveTab] = useState("Overview");
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
+  const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
   const { id } = useParams();
 
   const toggleDetails = () => {
     setIsDetailsVisible(!isDetailsVisible);
   };
 
-  const item = accountsData.find((acc) => acc.id === parseInt(id));
+  useEffect(() => {
+    const fetchAccount = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3011/accounts/${id}`
+        );
+        setItem(response.data);
+      } catch (error) {
+        console.error("Error fetching account:", error);
+        toast.error("Failed to fetch account details.");
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAccount();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center mt-72">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center mt-72">
+        <p>Error fetching account details.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen">
@@ -333,24 +370,25 @@ const AccountsOverview = () => {
                                 {
                                   label: "Billing Street",
                                   value:
-                                    item.address_information.billing_street,
+                                    item.address_information?.billing_street,
                                 },
                                 {
                                   label: "Billing City",
-                                  value: item.address_information.billing_city,
+                                  value: item.address_information?.billing_city,
                                 },
                                 {
                                   label: "Billing State",
-                                  value: item.address_information.billing_state,
+                                  value:
+                                    item.address_information?.billing_state,
                                 },
                                 {
                                   label: "Billing Code",
-                                  value: item.address_information.billing_code,
+                                  value: item.address_information?.billing_code,
                                 },
                                 {
                                   label: "Billing Country",
                                   value:
-                                    item.address_information.billing_country,
+                                    item.address_information?.billing_country,
                                 },
                               ].map((item, index) => (
                                 <div
@@ -373,25 +411,27 @@ const AccountsOverview = () => {
                                 {
                                   label: "Shipping Street",
                                   value:
-                                    item.address_information.shipping_street,
+                                    item.address_information?.shipping_street,
                                 },
                                 {
                                   label: "Shipping City",
-                                  value: item.address_information.shipping_city,
+                                  value:
+                                    item.address_information?.shipping_city,
                                 },
                                 {
                                   label: "Shipping State",
                                   value:
-                                    item.address_information.shipping_state,
+                                    item.address_information?.shipping_state,
                                 },
                                 {
                                   label: "Shipping Code",
-                                  value: item.address_information.shipping_code,
+                                  value:
+                                    item.address_information?.shipping_code,
                                 },
                                 {
                                   label: "Shipping Country",
                                   value:
-                                    item.address_information.shipping_country,
+                                    item.address_information?.shipping_country,
                                 },
                               ].map((item, index) => (
                                 <div
@@ -422,9 +462,7 @@ const AccountsOverview = () => {
                               Description
                             </h3>
                             <p className="font-medium text-primary text-sm">
-                              King is a multinational contract manufacturing
-                              company with its headquarters in Baltimore, United
-                              States.
+                              {item.description}
                             </p>
                           </div>
                         </div>

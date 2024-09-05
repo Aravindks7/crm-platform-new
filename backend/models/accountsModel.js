@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Define the schema for the Accounts collection
 const accountSchema = new mongoose.Schema({
@@ -43,4 +43,4 @@ const accountSchema = new mongoose.Schema({
 // Create the model from the schema
 const Account = mongoose.model("Account", accountSchema);
 
-module.exports = Account;
+export default Account;

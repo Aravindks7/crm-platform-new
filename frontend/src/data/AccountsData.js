@@ -133,9 +133,6 @@ export const accountColumnDefs = [
   {
     field: "website",
     headerName: "Website",
-    cellRenderer: (params) => {
-      return `<a href="${params.value}" target="_blank">${params.value}</a>`;
-    },
   },
   { field: "account_site", headerName: "Account Site" },
   { field: "account_owner", headerName: "Account Owner" },
